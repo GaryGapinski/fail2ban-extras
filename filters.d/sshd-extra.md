@@ -3,10 +3,10 @@
 This filter matches commonly-encountered sshd log messages
 associated with Internet-borne ssh exploits.
 
-**NB**: A modified `sshd_config` file must be used to accompany some of these 
+**NB**: A modified `sshd_config` file must be used to exploit some of these 
 filter expressions.
 
-A rather severe (partial) sshd_config as an example:
+A rather rigorous (partial) sshd_config as an example:
 ```
 …
 # increase logging level
@@ -48,13 +48,16 @@ MACs hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com
 
 That combination, particularly the restrictions on host keys, key exchange, 
 ciphers, and MACs
-seems effective against over 80% of arrivees 
-(who at the the time of this writing identify as `SSH-2.0-libssh-0.6.3`
-for which I have no good explanation).
-They FIN ACK as soon as they see the server key exchange init
+has been observed to effectively deny over 80% of arrivees 
+(which at the the time of this writing identify as `SSH-2.0-libssh-0.6.3`
+for which I have no good interpretation).
+These FIN ACK as soon as they see the server key exchange init
 (observed as `Connection closed by <address> port <port> [preauth]` in `auth.log`).
 The ones who get farther encounter
 `no matching key exchange method found`.
+
+Those sshd_config settings of course require that both the server and the client are recent 
+implementations of the OpenSSH protocol.
 
 Example jail configuration:
 
