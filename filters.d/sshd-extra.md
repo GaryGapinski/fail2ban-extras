@@ -36,7 +36,7 @@ HostKeyAlgorithms ssh-ed25519
 
 # restrict key exchange algorithms
 KexAlgorithms curve25519-sha256@libssh.org
-# this has the added benefit of removeg DH_GEX
+# this has the added benefit of removing DH_GEX
 
 # restrict ciphers
 Ciphers chacha20-poly1305@openssh.com
