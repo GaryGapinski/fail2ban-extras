@@ -1,5 +1,5 @@
 # sshd-extra filter
-This filter matches commonly-encountered sshd log messages
+This [filter](sshd-extra.conf) matches commonly-encountered sshd log messages
 associated with Internet-borne ssh exploits.
 
 **NB**: A modified `sshd_config` file must be used to exploit some of these
