@@ -64,26 +64,22 @@ These FIN ACK as soon as they see the server key exchange init
 The ones which get farther send client key exchange init and then the server FIN ACKs
 (observed as `Unable to negotiate … no matching key exchange method found`).
 
-Example `sshd-extra.conf` jail definition (to be placed in `/etc/fail2ban/jail.d`):
+## Usage
+
+The filter definition — [../filter.d/sshd-extra.conf](../filter.d/sshd-extra.conf) —
+should be placed in `/etc/fail2ban/filter.d`.
+
+The jail definition — [sshd-extra.conf](sshd-extra.conf) —
+should be placed in `/etc/fail2ban/filter.d`.
+
+The jail definition can be tweaked using an additional j`ailname.local` (not supplied here).
+Example `sshd-extra.local` (to be placed in `/etc/fail2ban/jail.d`):
 ```
 [sshd-extra]
-enabled  = true
-port     = ssh
-filter   = sshd-extra
-logpath  = /var/log/auth.log
-maxretry = 1
-```
-
-Example `sshd-extra.local` (to be placed in `/etc/fail2ban/jail.d`)::
-```
-[sshd-extra]
-
-# ban all ports
-port     = all
-
 # use IP sets for banning
 # NB: ipset may not be installed by default
 banaction = iptables-ipset-proto6-allports
+port      = all
 
 # increase bantime
 bantime   = 1h
