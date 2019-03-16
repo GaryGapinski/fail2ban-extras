@@ -72,7 +72,7 @@ should be placed in `/etc/fail2ban/filter.d`.
 The jail definition — [sshd-extra.conf](sshd-extra.conf) —
 should be placed in `/etc/fail2ban/jail.d`.
 
-The jail definition can be tweaked using an additional j`ailname.local` (not supplied here).
+The jail definition can be tweaked using an additional `jailname.local` (not supplied here).
 Example `sshd-extra.local` (to be placed in `/etc/fail2ban/jail.d`):
 ```
 [sshd-extra]
