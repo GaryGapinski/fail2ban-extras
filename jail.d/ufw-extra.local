@@ -1,7 +1,7 @@
-### sample sshd-extra.local
+### sample ufw-extra.local
 ### adjust as desired
 
-[sshd-extra]
+[ufw-extra]
 
 ## enable the jail (not enabled by default in jail definition)
 enabled  = true

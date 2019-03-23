@@ -3,7 +3,7 @@
 
 [postfix-extra]
 
-## enable the jail (not enabled by default in sshd-extra.conf)
+## enable the jail (not enabled by default in jail definition)
 enabled  = true
 
 ## use IP sets for banning
