@@ -65,31 +65,17 @@ The ones which get farther send client key exchange init and then the server FIN
 (observed as `Unable to negotiate … no matching key exchange method found`).
 Those which manage a key exchange fail authentication.
 
+¹ Routinely seen:
+- host_key_algorithms: `ssh-rsa,ssh-dss`
+- kex_algorithms: `diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1`
+
 ## Usage
 
-The filter definition — [../filter.d/sshd-extra.conf](../filter.d/sshd-extra.conf) —
+- The filter definition — [sshd-extra.conf](../filter.d/sshd-extra.conf) —
 should be placed in `/etc/fail2ban/filter.d`.
-
-The jail definition — [sshd-extra.conf](sshd-extra.conf) —
+- The jail definition — [sshd-extra.conf](../jail.dsshd-extra.conf) —
 should be placed in `/etc/fail2ban/jail.d`.
-
-The jail definition can be tweaked using an additional `jailname.local` (not supplied here).
-Example `sshd-extra.local` (to be placed in `/etc/fail2ban/jail.d`):
-```
-[sshd-extra]
-# use IP sets for banning
-# NB: ipset may not be installed by default
-banaction = iptables-ipset-proto6-allports
-port      = all
-
-# increase bantime
-bantime   = 1h
-# bantime is typically 10m by default
-```
-
-----------
-
-¹ Routinely seen: 
-- host_key_algorithms: `ssh-rsa,ssh-dss`
-- kex_algorithms `diffie-hellman-group-exchange-sha256,diffie-hellman-group-exchange-sha1,diffie-hellman-group14-sha1,diffie-hellman-group1-sha1`
-
+- The jail definition must be enabled using
+[sshd-extra.local](../jail.d/sshd-extra.local) (or an alternative configuration file)
+which should be placed in `/etc/fail2ban/jail.d`.
+The variant banaction, port (all ports), and bantime are arbitrary adjustments and are optional.
