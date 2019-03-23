@@ -73,7 +73,7 @@ Those which manage a key exchange fail authentication.
 
 - The filter definition — [sshd-extra.conf](../filter.d/sshd-extra.conf) —
 should be placed in `/etc/fail2ban/filter.d`.
-- The jail definition — [sshd-extra.conf](../jail.dsshd-extra.conf) —
+- The jail definition — [sshd-extra.conf](../jail.d/sshd-extra.conf) —
 should be placed in `/etc/fail2ban/jail.d`.
 - The jail definition must be enabled using
 [sshd-extra.local](../jail.d/sshd-extra.local) (or an alternative configuration file)
