@@ -1,0 +1,20 @@
+### change iptables-common reject type so that it can be easily
+### discerned in traffic from simple port unreachable
+
+[Init]
+
+# Option:  blocktype
+# Note:    This is what the action does with rules. This can be any jump target
+#          as per the iptables man page (section 8). Common values are DROP
+#          REJECT, REJECT --reject-with icmp-port-unreachable
+# Values:  STRING
+blocktype = REJECT --reject-with icmp-admin-prohibited
+
+[Init?family=inet6]
+
+# Option:  blocktype (ipv6)
+# Note:    This is what the action does with rules. This can be any jump target
+#          as per the iptables man page (section 8). Common values are DROP
+#          REJECT, REJECT --reject-with icmp6-port-unreachable
+# Values:  STRING
+blocktype = REJECT --reject-with icmp6-adm-prohibited
