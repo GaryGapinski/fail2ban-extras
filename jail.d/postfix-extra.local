@@ -1,0 +1,17 @@
+### sample postfix-extra.local
+### adjust as desired
+
+[postfix-extra]
+
+## enable the jail (not enabled by default in sshd-extra.conf)
+enabled  = true
+
+## use IP sets for banning
+## (default fail2ban banaction is typically iptables-multiport /etc/fail2ban/jail.conf)
+## NB: ipset may not be installed by default
+banaction = iptables-ipset-proto6-allports
+port      = all
+
+## increase bantime
+## (default fail2ban bantime is typically 10m in /etc/fail2ban/jail.conf)
+bantime   = 1d
