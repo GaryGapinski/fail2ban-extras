@@ -1,13 +1,13 @@
 # fail2ban-extras
 
-Extra fail2ban filters for [Fail2Ban](https://github.com/fail2ban/fail2ban).
+Extra filters for [Fail2Ban](https://github.com/fail2ban/fail2ban).
 
 ## Filters
 
 The following filters (and associated jail definitions) are available:
 
 - sshd-extra ([Documentation](filter.d/sshd-extra.md))
-- postfix-extra
+- postfix-extra ([Documentation](filter.d/postfix-extra.md))
 - ufw-extra
 
 ## Usage
