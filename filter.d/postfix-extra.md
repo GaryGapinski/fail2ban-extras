@@ -5,7 +5,7 @@ associated with commonly-encountered Internet-borne exploits.
 
 This is not meant to replace the default Postfix filter (`postfix.conf`), which should be used in conjunction with this one.
 
-The following (partial) Postfix configuration has been used for testing the filter.
+The following (partial) Postfix `main.cf` configuration has been used for testing the filter.
 
 ```
 ### HELO/EHLO restrictions:
@@ -50,6 +50,24 @@ smtpd_recipient_restrictions =
         permit
 ```
 
+As well, SMTP AUTH is **disabled** for smtpd on port 25 in `master.cf`.
+```
+#
+# Postfix master process configuration file.  For details on the format
+# of the file, see the master(5) manual page (command: "man 5 master" or
+# on-line: http://www.postfix.org/master.5.html).
+#
+# Do not forget to execute "postfix reload" after editing this file.
+#
+# ==========================================================================
+# service type  private unpriv  chroot  wakeup  maxproc command + args
+#               (yes)   (yes)   (no)    (never) (100)
+# ==========================================================================
+smtp      inet  n       -       y       -       -       smtpd
+  -o smtpd_sasl_auth_enable=no
+```
+SMTP AUTH *is* enabled for submission (port 587).
+ 
 ## Usage
 
 - The filter definition — [postfix-extra.conf](../filter.d/postfix-extra.conf) —
