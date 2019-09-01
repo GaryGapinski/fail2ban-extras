@@ -8,46 +8,93 @@ This is not meant to replace the default Postfix filter (`postfix.conf`), which 
 The following (partial) Postfix `main.cf` configuration has been used for testing the filter.
 
 ```
-### HELO/EHLO restrictions:
+
+### smtpd (service) settings
+### some settings in helo, sender, relay, recipient are duplicative
+### with smtpd_delay_reject = yes they are deferred until RCPT TO
+###
+## reduce smtpd_timeout
+smtpd_timeout = 15s
+
+## disable the VRFY command
+disable_vrfy_command = yes
+
+## smtp restrictions
+# delay reject until RCPT TO
 smtpd_delay_reject = yes
+
+## HELO/EHLO restrictions:
+# require HELO/EHLO
 smtpd_helo_required = yes
+# punish dalliers
+smtp_helo_timeout = 3s
 smtpd_helo_restrictions =
+        # allow trusted networks
         permit_mynetworks,
+        # HELO/EHLO must be FQDN
         reject_non_fqdn_helo_hostname,
+        # HELO/EHLO must not be malformed
         reject_invalid_helo_hostname,
+        # HELO/EHLO must have good DNS
         reject_unknown_helo_hostname,
         permit
 
-### Sender restrictions:
+## Sender restrictions:
 smtpd_sender_restrictions =
+        # allow trusted networks
         permit_mynetworks,
+        # use master.cf to allow permit_sasl_authenticated for submission
         # permit_sasl_authenticated,
+        # sender must have FQDN 
         reject_non_fqdn_sender,
+        # sender must have good DNS
         reject_unknown_sender_domain,
+        # permit if previous did not permit or reject
         permit
 
-### Relay restrictions
+## Relay restrictions
 smtpd_relay_restrictions =
+        # allow trusted networks
         permit_mynetworks,
-        permit_sasl_authenticated,
+        # use master.cf to allow permit_sasl_authenticated for submission
+        # permit_sasl_authenticated,
         defer_unauth_destination,
+        # permit if previous did not permit or reject
         permit
 
-### Recipient restrictions:
+## Recipient restrictions:
 smtpd_recipient_restrictions =
+        # allow trusted networks
         permit_mynetworks,
+        # use master.cf to allow permit_sasl_authenticated for submission
         # permit_sasl_authenticated,
-        reject_invalid_hostname,
-        reject_non_fqdn_hostname,
-        reject_non_fqdn_sender,
-        reject_non_fqdn_recipient,
-        reject_unknown_sender_domain,
-        reject_unknown_recipient_domain,
-        reject_unauth_pipelining,
+        #!!! open relay prevention (based on $mydestination)
+        #!!! reject_unauth_destination should appear before other
+        #!!! restrictions which could permit unwanted acceptance
+        #!!! see http://www.postfix.org/SMTPD_ACCESS_README.html#danger
         reject_unauth_destination,
+        # following restrictions may duplicate those of helo, sender, and relay
+        # sender must have FQDN 
+        reject_non_fqdn_hostname,
+        # must be FQDN
+        reject_non_fqdn_sender,
+        # recipient must be FQDN
+        reject_non_fqdn_recipient,
+        # sender must have good DNS
+        reject_unknown_sender_domain,
+        # recipient domain must have good DNS
+        reject_unknown_recipient_domain,
+        # reject bad behavior
+        reject_unauth_pipelining,
         # place desired RBLs here
+        #--
+        # RBLs
+        #--
+        # perform SPF check
         check_policy_service unix:private/policy-spf,
+        # permit if previous did not allow or reject
         permit
+
 ```
 
 As well, SMTP AUTH is **disabled** for smtpd on port 25 in `master.cf`.
