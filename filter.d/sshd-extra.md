@@ -7,6 +7,9 @@ filter expressions.
 LogLevel VERBOSE is needed for some of the filter regexes.
 Restricting cryptographic algorithms deflects many exploits.
 
+**NB**: These settings deliberately curtail interoperability by
+removing algorithms commonly required by some client implementations.
+
 A partial sshd_config as an example:
 ```
 # increase logging level
@@ -34,8 +37,8 @@ HostKey /etc/ssh/ssh_host_ed25519_key
 
 # restrict key exchange algorithms
 KexAlgorithms curve25519-sha256
-# this has the added benefit of removing DH_GEX
-# DH_GEX warrants custom moduli not commonly customized
+# this has the added benefit of removing finite field Diffie-Hellman key exchange
+# which warrants deliberately generated custom moduli
 
 # restrict ciphers
 Ciphers chacha20-poly1305@openssh.com
@@ -54,16 +57,19 @@ This configuration — deliberately — does not include algorithms which are
 [mandatory-to-implement](https://tools.ietf.org/html/rfc4253)
 (e.g., ssh-rsa, 3des-cbc, diffie-hellman-group1-sha1, hmac-sha1) or recommended.
 Requisite implementation does not entail requisite usage.
+If finite field DH must be used for interoperability, consider using groups defined in 
+[RFC 8268](https://tools.ietf.org/html/rfc8268) with the possible addition of `diffie-hellman-group14-sha1`.
+And generate custom moduli for them.
 
 This configuration
 — particularly the restrictions on host key, key exchange, cipher, and MAC algorithms —
-has been observed to effectively deny over 80% of unwanted arrivees
+has been observed to effectively deny over 80% of unwanted arrivées
 (which at the the time of this writing predominantly identify as `SSH-2.0-libssh-0.6.3`¹).
 These FIN ACK as soon as they see the server key exchange init
 (observed as `Connection closed by … [preauth]`).
 The ones which get farther send client key exchange init and then the server FIN ACKs
 (observed as `Unable to negotiate … no matching key exchange method found`).
-Those which manage a key exchange fail authentication.
+Those which manage a key exchange then fail SSH authentication.
 
 ¹ Routinely seen:
 - host_key_algorithms: `ssh-rsa,ssh-dss`
