@@ -51,15 +51,11 @@ This can typically be placed at the end of the default `sshd_config` file.
 Those sshd_config settings of course require that both the server and the (desired) client are compatible
 implementations of the OpenSSH protocol.
 Ensure that desired clients will be accommodated lest Self Denial occur.
-[https://ssh-comparison.quendi.de/](https://ssh-comparison.quendi.de/) has a nice comparison of implementations.
 
-This configuration — deliberately — does not include algorithms which are
+This configuration — deliberately — does not include algorithms which are either
 [mandatory-to-implement](https://tools.ietf.org/html/rfc4253)
 (e.g., ssh-rsa, 3des-cbc, diffie-hellman-group1-sha1, hmac-sha1) or recommended.
 Requisite implementation does not entail requisite usage.
-If finite field DH must be used for interoperability, consider using groups defined in 
-[RFC 8268](https://tools.ietf.org/html/rfc8268) with the possible addition of `diffie-hellman-group14-sha1`.
-And generate custom moduli for them.
 
 This configuration
 — particularly the restrictions on host key, key exchange, cipher, and MAC algorithms —
@@ -70,6 +66,10 @@ These FIN ACK as soon as they see the server key exchange init
 The ones which get farther send client key exchange init and then the server FIN ACKs
 (observed as `Unable to negotiate … no matching key exchange method found`).
 Those which manage a key exchange then fail SSH authentication.
+
+If finite field DH *must* be used for interoperability, consider using groups defined in 
+[RFC 8268](https://tools.ietf.org/html/rfc8268) with the possible addition of `diffie-hellman-group14-sha1`.
+And generate corresponding custom moduli for them.
 
 ¹ Routinely seen:
 - host_key_algorithms: `ssh-rsa,ssh-dss`
